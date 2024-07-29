@@ -1,9 +1,13 @@
 package cliente;
 
-public class Main {
-    public static void main(String[] args) {
+import java.io.IOException;
+import java.net.Socket;
 
-        Cliente cliente = new Cliente();
+public class MainCliente {
+    public static void main(String[] args) throws IOException {
+
+        Socket socketCliente = new Socket("localhost",5000);
+
     }
 
 }
