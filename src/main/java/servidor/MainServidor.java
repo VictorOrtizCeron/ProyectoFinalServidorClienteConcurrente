@@ -8,7 +8,7 @@ public class MainServidor {
 
     public static void main(String[] args)  {
         try{
-            ServerSocket serverSocket = new ServerSocket(5000);
+            ServerSocket serverSocket = new ServerSocket(6969);
             Socket cliente = serverSocket.accept();
             System.out.println("Se ha conectado un cliente");
         }
