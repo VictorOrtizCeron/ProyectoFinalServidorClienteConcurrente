@@ -8,6 +8,8 @@ public class MainCliente {
 
         Socket socketCliente = new Socket("localhost",6969);
 
+
+
     }
 
 }
