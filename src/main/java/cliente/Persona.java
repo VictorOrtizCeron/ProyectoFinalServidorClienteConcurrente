@@ -2,20 +2,21 @@ package cliente;
 
 public class Persona {
 
-    private String id;
+    private String contra;
     private String nombre;
 
-    public Persona(String id, String nombre) {
-        this.id = id;
+    public Persona(String nombre, String contra) {
+
         this.nombre = nombre;
+        this.contra = contra;
     }
 
-    public String getId() {
-        return id;
+    public String getContra() {
+        return contra;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setContra(String contra) {
+        this.contra = contra;
     }
 
     public String getNombre() {
@@ -31,8 +32,8 @@ public class Persona {
     @Override
     public String toString() {
         return "Persona{" +
-                "id='" + id + '\'' +
-                ", nombre='" + nombre + '\'' +
+                "nombre='" + nombre + '\'' +
+                ", contraseña='" + contra + '\'' +
                 '}';
     }
 }
