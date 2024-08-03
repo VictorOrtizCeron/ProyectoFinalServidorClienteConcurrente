@@ -1,4 +1,6 @@
 package cliente;
+import com.google.gson.Gson;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,7 +39,9 @@ public class LoginForm extends JFrame {
                     Socket socket = new Socket("localhost",8080);
                     DataOutputStream mensaje = new DataOutputStream(socket.getOutputStream());
                     //escribir el gson
-                    mensaje.writeUTF(nombre + " " +contra);
+                    Gson gson = new Gson();
+                    Persona persona = new Persona(nombre,contra);
+                    mensaje.writeUTF(gson.toJson(persona));
                     mensaje.close();
                     socket.close();
 

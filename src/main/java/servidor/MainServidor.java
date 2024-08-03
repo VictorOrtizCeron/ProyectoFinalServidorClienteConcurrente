@@ -3,6 +3,7 @@ package servidor;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -15,8 +16,10 @@ public class MainServidor {
 
         try {
             ServerSocket serverSocket = new ServerSocket(8080);
-            DataInputStream in = new DataInputStream(new BufferedInputStream(serverSocket.accept().getInputStream()));
-            System.out.println(in.read());
+            Socket socket = serverSocket.accept();
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+
+            System.out.println(in.readUTF());
 
         } catch (IOException ex) {
             ex.printStackTrace();
