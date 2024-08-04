@@ -1,43 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="cliente.LoginForm">
-  <grid id="27dc6" binding="MainPanel" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="MainPanel" layout-manager="GridLayoutManager" row-count="6" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="300" bottom="0" right="300"/>
     <constraints>
-      <xy x="20" y="20" width="754" height="400"/>
+      <xy x="20" y="20" width="1623" height="400"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
+      <component id="9f9c" class="javax.swing.JPasswordField" binding="password">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="400" height="-1"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="4dca3" class="javax.swing.JLabel" binding="labelUsuario">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Arial Rounded MT Bold" size="16" style="0"/>
+          <text value="Usuario"/>
+        </properties>
+      </component>
+      <component id="aeee0" class="javax.swing.JLabel" binding="labelContrasena">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Arial Rounded MT Bold" size="16" style="0"/>
+          <text value="Contraseña"/>
+        </properties>
+      </component>
+      <component id="7afb7" class="javax.swing.JButton" binding="botonSiguiente">
+        <constraints>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-8217918"/>
+          <enabled value="true"/>
+          <font name="Arial Rounded MT Bold" size="16" style="0"/>
+          <text value="Siguiente   ⇒"/>
+        </properties>
+      </component>
+      <component id="46aa6" class="javax.swing.JTextField" binding="usuario">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="400" height="-1"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
       <component id="c5372" class="javax.swing.JLabel" binding="Titulo">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Login"/>
-        </properties>
-      </component>
-      <component id="46aa6" class="javax.swing.JTextField" binding="NombreUsuario">
-        <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="9f9c" class="javax.swing.JPasswordField" binding="password">
-        <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="7afb7" class="javax.swing.JButton" binding="botonIngresar">
-        <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Ingresar"/>
+          <enabled value="true"/>
+          <font name="Arial Rounded MT Bold" size="36" style="1"/>
+          <foreground color="-8217918"/>
+          <text value="¡Bienvenido a October Eats! 😊"/>
         </properties>
       </component>
     </children>

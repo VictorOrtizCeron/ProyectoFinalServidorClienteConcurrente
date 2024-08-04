@@ -4,17 +4,18 @@ import com.google.gson.Gson;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
 public class LoginForm extends JFrame {
     private JPanel MainPanel;
-    private JTextField NombreUsuario;
+    private JTextField usuario;
     private JPasswordField password;
-    private JButton botonIngresar;
+    private JButton botonSiguiente;
     private JLabel Titulo;
+    private JLabel labelContrasena;
+    private JLabel labelUsuario;
 
     public LoginForm() {
 
@@ -25,12 +26,12 @@ public class LoginForm extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        botonIngresar.addActionListener(new ActionListener() {
+        botonSiguiente.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 //agarra la info en los input fields cliente
-                String nombre = NombreUsuario.getText();
+                String nombre = usuario.getText();
                 String contra = password.getText();
 
                 //enviar a servidor
