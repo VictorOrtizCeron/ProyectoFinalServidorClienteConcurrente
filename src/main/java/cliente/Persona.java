@@ -5,6 +5,8 @@ public class Persona {
     private String contra;
     private String nombre;
 
+
+
     public Persona(String nombre, String contra) {
 
         this.nombre = nombre;
