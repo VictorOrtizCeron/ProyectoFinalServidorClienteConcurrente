@@ -8,4 +8,5 @@ import java.net.Socket;
 
 public class Cliente {
 
+    private String nombre;
 }
