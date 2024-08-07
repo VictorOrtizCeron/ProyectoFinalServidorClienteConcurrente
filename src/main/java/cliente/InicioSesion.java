@@ -10,7 +10,7 @@ import java.net.Socket;
 
 
 
-public class LoginForm extends JFrame {
+public class InicioSesion extends JFrame {
     private JPanel MainPanel;
     private JTextField usuario;
     private JPasswordField password;
@@ -20,7 +20,7 @@ public class LoginForm extends JFrame {
     private JLabel labelUsuario;
     private JButton botonRegistrar;
 
-    public LoginForm() {
+    public InicioSesion() {
 
         setContentPane(MainPanel);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -75,7 +75,7 @@ public class LoginForm extends JFrame {
                 String email = usuario.getText();
 
                 try {
-                    InfoUser du = new InfoUser();
+                    RegistroCuenta du = new RegistroCuenta();
                     du.setVisible(true);
                     setVisible(false);
 

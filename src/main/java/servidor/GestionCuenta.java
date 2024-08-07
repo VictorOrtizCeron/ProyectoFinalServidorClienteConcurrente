@@ -13,7 +13,7 @@ public class GestionCuenta {
         try
         {
             conexion.setConexion();
-            conexion.setConsulta("Insert into sys.personaTest(nombre, contra) values(?,?)");
+            conexion.setConsulta("Insert into octobereats.personaTest(nombre, contra) values(?,?)");
             conexion.getConsulta().setString(1, nom);
             conexion.getConsulta().setString(2, contra);
 
