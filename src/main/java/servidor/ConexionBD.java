@@ -6,9 +6,9 @@ public class ConexionBD {
     Connection conexion = null;
     PreparedStatement consulta = null;
     ResultSet resultado = null;
-    String url = "jdbc:mysql://localhost:3306/sys";
+    String url = "jdbc:mysql://localhost:3306/octobereats";
     String username = "root";
-    String password = "root";//esto depende de la contraseña que hayan escogido
+    String password = "";//esto depende de la contraseña que hayan escogido
 
     public void setConexion()
     {

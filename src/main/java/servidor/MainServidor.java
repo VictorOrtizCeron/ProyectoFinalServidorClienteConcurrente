@@ -2,6 +2,8 @@ package servidor;
 
 import cliente.Persona;
 import com.google.gson.Gson;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.ReadContext;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -22,13 +24,22 @@ public class MainServidor {
             Socket socket = serverSocket.accept();
             DataInputStream in = new DataInputStream(socket.getInputStream());
             Gson gson = new Gson();
-            Persona persona = gson.fromJson(in.readUTF(), Persona.class);
+
+            //Persona persona = gson.fromJson(in.readUTF(), Persona.class);
+
+
+            ReadContext ctx = JsonPath.parse(in.readUTF());
+
+            String nombre = ctx.read("nombre");
+
+            String tipoRequest = ctx.read("RequestType");
 
             GestionCuenta gestion = new GestionCuenta();
-            gestion.registrarCuenta(persona.getNombre(), persona.getContra());
+
+            System.out.println(tipoRequest);
 
 
-            System.out.println(in.readUTF());
+
 
         } catch (IOException ex) {
             ex.printStackTrace();
