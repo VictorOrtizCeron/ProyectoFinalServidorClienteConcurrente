@@ -36,6 +36,8 @@ public class RegistroCuenta extends JFrame {
                 String apellidoUsuarioNuevo = apellido.getText();
                 String ciudadUsuarioNuevo = ciudad.getText();
                 String emailUsuarioNuevo = email.getText();
+                String contraUsuarioNuevo = password.getText();
+
 
                 //validar que no sean nulos o vacios
                 //enviar al backend con sockets
