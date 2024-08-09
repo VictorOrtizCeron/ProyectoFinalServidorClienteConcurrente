@@ -2,18 +2,13 @@ package cliente;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Objects;
 
 public class MenuPrincipal extends  JFrame {
-    private JComboBox DropDownMenu;
-    private JCheckBox hamburguesaCheckBox;
-    private JCheckBox pizzaCheckBox;
-    private JCheckBox papasCheckBox;
-    private JCheckBox cocaColaCheckBox;
-    private JCheckBox canadaDryCheckBox;
-    private JCheckBox téFrioCheckBox;
-    private JButton agregarAlCarritoButton;
     private JPanel menuPrincipal;
+    private JTabbedPane tabbedPane1;
+    private JButton carritoButton;
+    private JButton agregarItemsSeleccionadosAlButton;
+    private JButton perfilButton;
 
     public  MenuPrincipal(){
     setContentPane(menuPrincipal);
@@ -23,16 +18,23 @@ public class MenuPrincipal extends  JFrame {
     setLocationRelativeTo(null);
     setVisible(true);
 
-    DropDownMenu.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.out.println(DropDownMenu.getSelectedItem());
-            //hamburguesaCheckBox.setText(Objects.requireNonNull(DropDownMenu.getSelectedItem()).toString());
             //Envia nombre de restaurante seleccionado a backend
             //backend retorna los productos del restaurante
             //cliente formatea los productos para que se vean bien
-        }
-    });
 
+
+        perfilButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                Perfil perfil = new Perfil();
+                perfil.setVisible(true);
+                setVisible(false);
+
+            }    catch (Exception ex) {
+                throw new RuntimeException(ex);
+                }
+            }
+        });
     }
 }
