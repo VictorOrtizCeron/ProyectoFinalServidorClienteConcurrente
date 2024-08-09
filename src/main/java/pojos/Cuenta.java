@@ -9,9 +9,8 @@ public class Cuenta {
     private String ciudad;
     private String contra;
 
-    public Cuenta(String nombre, String apellido, String email, String ciudad , String contra) {
+    public Cuenta(String nombre, String email, String ciudad , String contra) {
         this.nombre = nombre;
-        this.apellido = apellido;
         this.email = email;
         this.ciudad = ciudad;
         this.contra = contra;

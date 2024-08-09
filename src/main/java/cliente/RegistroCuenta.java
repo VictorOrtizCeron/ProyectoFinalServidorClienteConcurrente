@@ -6,6 +6,7 @@ import pojos.Cuenta;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -46,8 +47,9 @@ public class RegistroCuenta extends JFrame {
                 try {
                     Socket socket = new Socket("localhost", 8080);
                     DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+                    DataInputStream in = new DataInputStream(socket.getInputStream());
                     Gson gson = new Gson();
-                    Cuenta cuentaARegistrar = new Cuenta(nombreUsuarioNuevo,apellidoUsuarioNuevo,ciudadUsuarioNuevo,emailUsuarioNuevo,contraUsuarioNuevo);
+                    Cuenta cuentaARegistrar = new Cuenta(nombreUsuarioNuevo,ciudadUsuarioNuevo,emailUsuarioNuevo,contraUsuarioNuevo);
 
                     String mensaje = gson.toJson(cuentaARegistrar, Cuenta.class);
 
@@ -56,6 +58,10 @@ public class RegistroCuenta extends JFrame {
                     mensaje = gson.toJson(jsonElement);
                     dos.writeUTF(mensaje);
 
+                    JOptionPane.showMessageDialog(null,in.readUTF());
+
+
+                    in.close();
                     dos.close();
                     socket.close();
 
