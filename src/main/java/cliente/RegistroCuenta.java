@@ -49,7 +49,6 @@ public class RegistroCuenta extends JFrame {
 
                     String mensaje = gson.toJson(cuentaARegistrar, Cuenta.class);
 
-
                     JsonElement jsonElement = gson.toJsonTree(cuentaARegistrar);
                     jsonElement.getAsJsonObject().addProperty("RequestType", "registroCuenta");
                     mensaje = gson.toJson(jsonElement);
@@ -58,31 +57,37 @@ public class RegistroCuenta extends JFrame {
                     dos.close();
                     socket.close();
 
-
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-
-
 
                 try {
                     // Aquí va el código para manejar la conexión o enviar datos
                     MenuPrincipal mp = new MenuPrincipal();
                     mp.setVisible(true);
                     setVisible(false);
+
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
             }
         });
+
         botonAtras.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                try {
                 InicioSesion panel1 = new InicioSesion();
                 panel1.setVisible(true);
                 setVisible(false);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+
             }
         });
+
     }
 }
 
