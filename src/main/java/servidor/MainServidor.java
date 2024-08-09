@@ -19,24 +19,46 @@ public class MainServidor {
 
     public static void main(String[] args) {
 
+
         try {
             ServerSocket serverSocket = new ServerSocket(8080);
-            Socket socket = serverSocket.accept();
-            DataInputStream in = new DataInputStream(socket.getInputStream());
-            Gson gson = new Gson();
-
-            //Persona persona = gson.fromJson(in.readUTF(), Persona.class);
 
 
-            ReadContext ctx = JsonPath.parse(in.readUTF());
+            while(true){
+                Socket socket = serverSocket.accept();
+                DataInputStream in = new DataInputStream(socket.getInputStream());
+                Gson gson = new Gson();
 
-            String nombre = ctx.read("nombre");
 
-            String tipoRequest = ctx.read("RequestType");
 
-            GestionCuenta gestion = new GestionCuenta();
 
-            System.out.println(tipoRequest);
+                ReadContext ctx = JsonPath.parse(in.readUTF());
+
+
+
+                String tipoRequest = ctx.read("RequestType");
+
+
+                if(tipoRequest.equals("registroCuenta")){
+
+                    String nombre = ctx.read("nombre");
+                    String contra = ctx.read("contra");
+                    String ciudad = ctx.read("ciudad");
+                    String email = ctx.read("email");
+
+
+
+                    GestionCuenta gestion = new GestionCuenta();
+                    gestion.registrarCuenta(nombre,contra,email,ciudad);
+
+                }
+
+
+                System.out.println(tipoRequest);
+                in.close();
+                socket.close();
+            }
+
 
 
 

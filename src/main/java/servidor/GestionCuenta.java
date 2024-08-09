@@ -8,14 +8,16 @@ public class GestionCuenta {
     ConexionBD conexion = new ConexionBD();
     ResultSet resultado = null;
 
-    public void registrarCuenta (String nom, String contra)
+    public void registrarCuenta (String nom, String contra,String email, String ciudad)
     {
         try
         {
             conexion.setConexion();
-            conexion.setConsulta("Insert into octobereats.personaTest(nombre, contra) values(?,?)");
+            conexion.setConsulta("Insert into octobereats.cuentas(nombre, contra, email,ciudad) values(?,?,?,?)");
             conexion.getConsulta().setString(1, nom);
             conexion.getConsulta().setString(2, contra);
+            conexion.getConsulta().setString(3, email);
+            conexion.getConsulta().setString(4, ciudad);
 
             if(conexion.getConsulta().executeUpdate() > 0)
             {

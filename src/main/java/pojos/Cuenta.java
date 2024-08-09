@@ -7,12 +7,22 @@ public class Cuenta {
     private String apellido;
     private String email;
     private String ciudad;
+    private String contra;
 
-    public Cuenta(String nombre, String apellido, String email, String ciudad) {
+    public Cuenta(String nombre, String apellido, String email, String ciudad , String contra) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
         this.ciudad = ciudad;
+        this.contra = contra;
+    }
+
+    public String getContra() {
+        return contra;
+    }
+
+    public void setContra(String contra) {
+        this.contra = contra;
     }
 
     public Long getId() {

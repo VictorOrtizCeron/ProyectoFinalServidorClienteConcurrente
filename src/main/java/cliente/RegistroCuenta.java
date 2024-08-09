@@ -45,7 +45,7 @@ public class RegistroCuenta extends JFrame {
                     Socket socket = new Socket("localhost", 8080);
                     DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
                     Gson gson = new Gson();
-                    Cuenta cuentaARegistrar = new Cuenta(nombreUsuarioNuevo,apellidoUsuarioNuevo,ciudadUsuarioNuevo,emailUsuarioNuevo);
+                    Cuenta cuentaARegistrar = new Cuenta(nombreUsuarioNuevo,apellidoUsuarioNuevo,ciudadUsuarioNuevo,emailUsuarioNuevo,contraUsuarioNuevo);
 
                     String mensaje = gson.toJson(cuentaARegistrar, Cuenta.class);
 
