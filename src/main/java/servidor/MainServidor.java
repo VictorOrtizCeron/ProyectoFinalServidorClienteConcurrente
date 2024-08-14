@@ -16,79 +16,29 @@ public class MainServidor {
 
     public static void main(String[] args) {
 
-
-        try {
-            ServerSocket serverSocket = new ServerSocket(8080);
-
-
-            while(true){
-                Socket socket = serverSocket.accept();
-                DataInputStream in = new DataInputStream(socket.getInputStream());
-                DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-                Gson gson = new Gson();
+        GestionRestaurantes gestionRestaurantes = new GestionRestaurantes();
+        gestionRestaurantes.getRestaurantes();
 
 
 
 
-                ReadContext ctx = JsonPath.parse(in.readUTF());
-
-
-
-                String tipoRequest = ctx.read("RequestType");
-
-
-                if(tipoRequest.equals("registroCuenta")){
-
-                    String nombre = ctx.read("nombre");
-                    String contra = ctx.read("contra");
-                    String ciudad = ctx.read("ciudad");
-                    String email = ctx.read("email");
-
-
-
-                    GestionCuenta gestion = new GestionCuenta();
-                    boolean resultadoRegistro = gestion.registrarCuenta(nombre,contra,email,ciudad);
-                    if (resultadoRegistro){
-                        dos.writeUTF("Registro exitoso");
-                    }else{
-                        dos.writeUTF("Registro fallido");
-                    }
-
-                }
-                else if(tipoRequest.equals("inicioSesion")){
-
-
-
-                    String contra = ctx.read("contra");
-                    String email = ctx.read("email");
-                    System.out.println(email);
-                    System.out.println(contra);
-                    GestionCuenta gestion = new GestionCuenta();
-
-                    boolean respuesta = gestion.iniciarSesion(email,contra);
-
-
-                    if(respuesta){
-                        dos.writeUTF("true");
-                    }
-                    else{
-                        dos.writeUTF("false");
-                    }
-                }
-
-                dos.close();
-                in.close();
-                socket.close();
-
-            }
+//        try{
+//            ServerSocket serverSocket = new ServerSocket(8080);
+//
+//            int count = 0;
+//
+//            while (true){
+//                Socket cliente = serverSocket.accept();
+//                Servidor servidor = new Servidor(cliente);
+//                servidor.run();
+//            }
+//        }catch (IOException e){
+//            e.printStackTrace();
+//        }
 
 
 
 
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
 
 
     }
