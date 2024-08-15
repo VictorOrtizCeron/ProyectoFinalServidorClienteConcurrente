@@ -1,11 +1,14 @@
 package servidor;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
+import pojos.Restaurante;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 public class Servidor extends Thread{
 
@@ -25,13 +28,15 @@ public class Servidor extends Thread{
 
     @Override
     public void run() {
+
+
         try {
 
 
             while(isCorriendo){
-
                 DataInputStream in = new DataInputStream(clientSocket.getInputStream());
                 DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+
                 Gson gson = new Gson();
 
 
@@ -82,10 +87,29 @@ public class Servidor extends Thread{
                         dos.writeUTF("false");
                     }
                 }
+                else if(tipoRequest.equals("getRestaurantes")){
+                    GestionRestaurantes gestionRestaurantes = new GestionRestaurantes();
+                    Restaurante[] restaurantes= gestionRestaurantes.getRestaurantes();
 
-                dos.close();
-                in.close();
-                clientSocket.close();
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("Restaurantes",gson.toJson(restaurantes));
+
+                    String mensaje = jsonObject.toString();
+
+                    dos.writeUTF(gson.toJson(restaurantes));
+
+                }
+
+
+
+
+
+                else if(tipoRequest.equals("close")){
+                    clientSocket = null;
+                    isCorriendo = false;
+                    dos.close();
+                    in.close();
+                }
 
             }
 

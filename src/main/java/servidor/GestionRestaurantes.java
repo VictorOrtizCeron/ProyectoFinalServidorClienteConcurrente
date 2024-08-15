@@ -1,13 +1,16 @@
 package servidor;
 
+import pojos.Restaurante;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class GestionRestaurantes {
     ConexionBD conexion = new ConexionBD();
     ResultSet resultado = null;
 
-    public boolean getRestaurantes(){
+    public Restaurante[] getRestaurantes(){
         try
         {
             conexion.setConexion();
@@ -16,20 +19,33 @@ public class GestionRestaurantes {
 
             resultado = conexion.getResultado();
 
-            while(resultado.next()){
-                for (int i = 1; i <= 4; i++) {
-                    System.out.print(resultado.getString(i) + "\t");
-                }
-                System.out.println();
-            }
-            return true;
+            ArrayList<Restaurante> restaurantes = new ArrayList<>();
 
+
+            while(resultado.next()){
+
+                String nombre = resultado.getString("nombre");
+                String ciudad = resultado.getString("ciudad");
+                String desc = resultado.getString("descripcion");
+
+                Restaurante temp = new Restaurante(nombre,ciudad,desc);
+                restaurantes.add(temp);
+            }
+
+            Restaurante[] ArregloRestaurantes = new Restaurante[restaurantes.size()];
+            int i =0;
+            for(Restaurante rest: restaurantes){
+                ArregloRestaurantes[i] = rest;
+                i++;
+            }
+            return ArregloRestaurantes;
 
         }
         catch(SQLException error)
         {
             error.printStackTrace();
-            return false;
+            return null;
+
         }
     }
 }

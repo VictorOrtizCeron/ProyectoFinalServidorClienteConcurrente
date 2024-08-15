@@ -16,25 +16,24 @@ public class MainServidor {
 
     public static void main(String[] args) {
 
-        GestionRestaurantes gestionRestaurantes = new GestionRestaurantes();
-        gestionRestaurantes.getRestaurantes();
 
 
 
 
-//        try{
-//            ServerSocket serverSocket = new ServerSocket(8080);
-//
-//            int count = 0;
-//
-//            while (true){
-//                Socket cliente = serverSocket.accept();
-//                Servidor servidor = new Servidor(cliente);
-//                servidor.run();
-//            }
-//        }catch (IOException e){
-//            e.printStackTrace();
-//        }
+
+        try{
+            ServerSocket serverSocket = new ServerSocket(8080);
+
+            int count = 0;
+
+            while (true){
+                Socket cliente = serverSocket.accept();
+                Servidor servidor = new Servidor(cliente);
+                servidor.run();
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
 
 
 

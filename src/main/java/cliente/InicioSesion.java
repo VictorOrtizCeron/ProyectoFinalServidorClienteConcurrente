@@ -1,6 +1,7 @@
 package cliente;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import pojos.Cuenta;
 
 import javax.swing.*;
@@ -62,7 +63,6 @@ public class InicioSesion extends JFrame {
 
                     dos.writeUTF(mensaje);
 
-                    System.out.println(mensaje);
 
                     String respuesta = in.readUTF();
 
@@ -72,6 +72,12 @@ public class InicioSesion extends JFrame {
                         MenuPrincipal mp = new MenuPrincipal();
                         mp.setVisible(true);
                         setVisible(false);
+
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("RequestType","close");
+                        dos.writeUTF(jsonObject.toString());
+
+
                         dos.close();
                         in.close();
                         socket.close();
@@ -79,6 +85,14 @@ public class InicioSesion extends JFrame {
 
                         JOptionPane.showMessageDialog(null,"La contraseña o el correo electrónico son incorrectos" +
                                 "\n Por favor ingrese credenciales correctas o cree una cuenta nueva.");
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("RequestType","close");
+                        dos.writeUTF(jsonObject.toString());
+
+
+                        dos.close();
+                        in.close();
+                        socket.close();
                     }
 
 
