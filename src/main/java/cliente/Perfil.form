@@ -5,7 +5,9 @@
     <constraints>
       <xy x="20" y="20" width="1002" height="400"/>
     </constraints>
-    <properties/>
+    <properties>
+      <background color="-4335169"/>
+    </properties>
     <border type="none"/>
     <children>
       <component id="a3102" class="javax.swing.JLabel">
@@ -14,6 +16,7 @@
         </constraints>
         <properties>
           <font name="Arial Rounded MT Bold" size="36" style="1"/>
+          <foreground color="-16233375"/>
           <text value="Perfil"/>
         </properties>
       </component>
