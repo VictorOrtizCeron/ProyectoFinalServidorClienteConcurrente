@@ -22,6 +22,7 @@ public class MenuPrincipal extends JFrame {
     private JButton agregarItemsSeleccionadosAlButton;
     private JButton perfilButton;
     private JScrollPane ScrollRestaurantes;
+    private JList list1;
 
     public MenuPrincipal() {
         setContentPane(menuPrincipal);
@@ -29,7 +30,14 @@ public class MenuPrincipal extends JFrame {
         setTitle("October Eats - Menu Principal");
         setSize(1280, 720);
         setLocationRelativeTo(null);
-        setVisible(true);
+
+
+        DefaultListModel listModel = new DefaultListModel();
+
+
+
+
+
 
         new Thread(()-> {
             try {
@@ -49,15 +57,28 @@ public class MenuPrincipal extends JFrame {
 
                 String restInput = in.readUTF();
 
+
+
                 Restaurante[] restaurantes  = gson.fromJson(restInput,Restaurante[].class);
 
 
 
+                for(int i = 0 ; i<restaurantes.length; i++){
+                    listModel.addElement(restaurantes[i].getNombre());
+                    System.out.println(restaurantes[i].getNombre());
+                }
 
+
+                list1.setModel(listModel);
+                list1.setSelectedIndex(0);
+                list1.setVisibleRowCount(restaurantes.length);
+                ScrollRestaurantes.add(list1);
+
+                //menuPrincipal.updateUI();
                 JsonObject close = new JsonObject();
                 close.addProperty("RequestType", "close");
                 dos.writeUTF(close.toString());
-
+                setVisible(true);
             } catch (IOException e) {
                 e.printStackTrace();
 
@@ -83,4 +104,6 @@ public class MenuPrincipal extends JFrame {
             }
         });
     }
+
+
 }
