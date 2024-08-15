@@ -103,6 +103,22 @@ public class MenuPrincipal extends JFrame {
                 }
             }
         });
+
+
+
+        carritoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Carrito carrito = new Carrito();
+                    carrito.setVisible(true);
+                    setVisible(false);
+
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
 
 
