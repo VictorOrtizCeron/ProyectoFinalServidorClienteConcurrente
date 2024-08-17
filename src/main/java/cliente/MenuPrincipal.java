@@ -1,20 +1,19 @@
 package cliente;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.ReadContext;
+import pojos.Producto;
 import pojos.Restaurante;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Optional;
 
 public class MenuPrincipal extends JFrame {
     private JPanel menuPrincipal;
@@ -23,6 +22,7 @@ public class MenuPrincipal extends JFrame {
     private JButton perfilButton;
     private JScrollPane ScrollRestaurantes;
     private JList list1;
+    private JPanel menu;
 
     public MenuPrincipal() {
         setContentPane(menuPrincipal);
@@ -30,7 +30,7 @@ public class MenuPrincipal extends JFrame {
         setTitle("October Eats - Menu Principal");
         setSize(1280, 720);
         setLocationRelativeTo(null);
-
+        setResizable(false);
 
         DefaultListModel listModel = new DefaultListModel();
 
@@ -74,11 +74,13 @@ public class MenuPrincipal extends JFrame {
                 list1.setVisibleRowCount(restaurantes.length);
                 ScrollRestaurantes.add(list1);
 
-                //menuPrincipal.updateUI();
+
+
+
                 JsonObject close = new JsonObject();
                 close.addProperty("RequestType", "close");
                 dos.writeUTF(close.toString());
-                setVisible(true);
+
             } catch (IOException e) {
                 e.printStackTrace();
 
@@ -88,7 +90,68 @@ public class MenuPrincipal extends JFrame {
 
 
 
+        list1.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
 
+                new Thread(()-> {
+
+                    Socket socket = null;
+                    try {
+                        socket = new Socket("localhost", 8080);
+
+                        DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+
+                        DataInputStream in = new DataInputStream(socket.getInputStream());
+                        Gson gson = new Gson();
+                        JList source = (JList) e.getSource();
+                        String restaurante = (String) source.getSelectedValue();
+
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("RequestType", "getProductos");
+                        jsonObject.addProperty("restaurante", restaurante);
+
+                        String mensaje = jsonObject.toString();
+                        dos.writeUTF(mensaje);
+
+
+
+                        String response = in.readUTF();
+
+                        Producto[] productos  = gson.fromJson(response,Producto[].class);
+
+                        menu.setLayout(new BoxLayout(menu,BoxLayout.Y_AXIS));
+                        menu.removeAll();
+                        menu.repaint();
+                        for (Producto producto:productos){
+                            //extraer y formatear
+                            for(int i = 0 ; i<5 ; i++){
+                                String desc = producto.getDescripcion().substring(0,50);
+                                menu.add(new component(producto.getNombre(),
+                                        producto.getDescripcion(),
+                                        Float.toString(producto.getPrecio())));
+                            }
+
+
+                        }
+
+                        setVisible(true);
+                        JsonObject close = new JsonObject();
+                        close.addProperty("RequestType", "close");
+                        dos.writeUTF(close.toString());
+
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+                }).start();
+
+
+
+
+
+            }
+        });
 
         perfilButton.addActionListener(new ActionListener() {
             @Override
@@ -103,6 +166,7 @@ public class MenuPrincipal extends JFrame {
                 }
             }
         });
+
     }
 
 
