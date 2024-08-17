@@ -1,10 +1,5 @@
 package servidor;
 
-import cliente.Persona;
-import com.google.gson.Gson;
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.ReadContext;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,10 +10,6 @@ import java.net.Socket;
 public class MainServidor {
 
     public static void main(String[] args) {
-
-
-
-
 
 
         try{
