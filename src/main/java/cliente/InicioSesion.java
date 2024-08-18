@@ -66,10 +66,12 @@ public class InicioSesion extends JFrame {
 
                     String respuesta = in.readUTF();
 
+
                     if(respuesta.equals("true")){
 
 
                         MenuPrincipal mp = new MenuPrincipal();
+                        mp.setEmail(email);
                         mp.setVisible(true);
                         setVisible(false);
 

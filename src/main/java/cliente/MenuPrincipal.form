@@ -16,6 +16,9 @@
         <properties>
           <background color="-4335169"/>
         </properties>
+        <clientProperties>
+          <html.disable class="java.lang.Boolean" value="false"/>
+        </clientProperties>
         <border type="none"/>
         <children>
           <component id="7a0c4" class="javax.swing.JLabel">
@@ -48,14 +51,16 @@
               <text value="Detalles de compra ✍"/>
             </properties>
           </component>
-          <component id="b7ab2" class="javax.swing.JButton" binding="agregarItemsSeleccionadosAlButton" default-binding="true">
+          <component id="b7ab2" class="javax.swing.JButton" binding="realizarCompraButton">
             <constraints>
-              <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <actionCommand value="Realizar compra 🛒"/>
               <background color="-14841191"/>
-              <font name="Arial Rounded MT Bold" size="28" style="0"/>
-              <text value="Agregar items seleccionados al carrito 🛒➕"/>
+              <font name="Arial Rounded MT Bold" size="36" style="0"/>
+              <label value="Realizar compra 🛒"/>
+              <text value="Realizar compra 🛒"/>
             </properties>
           </component>
           <component id="bdfa2" class="javax.swing.JButton" binding="perfilButton" default-binding="true">
@@ -70,7 +75,7 @@
           </component>
           <scrollpane id="5060e" binding="ScrollRestaurantes">
             <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
             <border type="none"/>
@@ -79,6 +84,7 @@
                 <constraints/>
                 <properties>
                   <autoscrolls value="true"/>
+                  <dropMode value="USE_SELECTION"/>
                   <enabled value="true"/>
                   <font name="Helvetica Neue" size="24"/>
                   <selectionBackground color="-14841191"/>
@@ -99,7 +105,7 @@
           <grid id="48e0f" binding="menu" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
             <border type="none"/>
@@ -111,6 +117,19 @@
               </hspacer>
             </children>
           </grid>
+          <component id="5ecb3" class="javax.swing.JProgressBar" binding="statusEnvio">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <minimum-size width="-1" height="40"/>
+              </grid>
+            </constraints>
+            <properties>
+              <borderPainted value="true"/>
+              <enabled value="true"/>
+              <string value="50%"/>
+              <stringPainted value="true"/>
+            </properties>
+          </component>
         </children>
       </grid>
     </children>
