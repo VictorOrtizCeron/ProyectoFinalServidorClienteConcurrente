@@ -126,7 +126,7 @@
             <properties>
               <borderPainted value="true"/>
               <enabled value="true"/>
-              <string value="50%"/>
+              <string value="0%"/>
               <stringPainted value="true"/>
             </properties>
           </component>

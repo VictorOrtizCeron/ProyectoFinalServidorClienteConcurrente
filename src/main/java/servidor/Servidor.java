@@ -120,6 +120,19 @@ public class Servidor extends Thread {
 
                     dos.writeUTF(String.valueOf(resultado));
 
+                }
+                else if (tipoRequest.equals("actualizarPedido")) {
+                    GestionPedidos gestionPedidos = new GestionPedidos();
+
+                    String emailCliente = ctx.read("emailCliente");
+                    String nombreRestaurante = ctx.read("restaurante");
+                    double precioD = ctx.read("precio");
+                    Float precio = Float.valueOf(Double.toString(precioD));
+                    String factura = ctx.read("factura");
+                    boolean resultado = gestionPedidos.actualizarPedido(emailCliente,nombreRestaurante,factura, precio);
+
+                    dos.writeUTF(String.valueOf(resultado));
+
                 } else if (tipoRequest.equals("close")) {
                     clientSocket = null;
                     isCorriendo = false;
