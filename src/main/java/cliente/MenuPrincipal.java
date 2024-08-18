@@ -257,13 +257,13 @@ public class MenuPrincipal extends JFrame {
                                         statusEnvio.setValue(i);
                                         statusEnvio.setString(String.valueOf(i)+"%");
 
-                                        i++;
+                                        i +=1;
                                         if(i ==50){
                                             JOptionPane.showMessageDialog(null,"Su pedido fue recogido para ser entregado!");
                                         }
                                         try {
 
-                                            sleep(1000);
+                                            sleep(750);
                                         } catch (InterruptedException e) {
                                             throw new RuntimeException(e);
                                         }
@@ -272,6 +272,26 @@ public class MenuPrincipal extends JFrame {
                                     statusEnvio.setString(String.valueOf(0)+"%");
                                     JOptionPane.showMessageDialog(null,"Su pedido ha sido entregado!");
 
+                                    try {
+                                        Socket socketPedido = new Socket("localhost", 8080);
+                                        DataOutputStream dosPedido = new DataOutputStream(socketPedido.getOutputStream());
+
+                                        DataInputStream inPedido = new DataInputStream(socketPedido.getInputStream());
+                                        Gson gsonPedido = new Gson();
+
+
+                                        JsonObject jsonObjectPedido = new JsonObject();
+                                        jsonObjectPedido.addProperty("RequestType", "actualizarPedido");
+                                        jsonObjectPedido.addProperty("emailCliente", email);
+                                        jsonObjectPedido.addProperty("restaurante", list1.getSelectedValue().toString());
+                                        jsonObjectPedido.addProperty("factura", getConfirmacionVenta().getFactura());
+                                        jsonObjectPedido.addProperty("precio", getConfirmacionVenta().getTotalCosto());
+                                        dosPedido.writeUTF(jsonObjectPedido.toString());
+
+
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
 
 
 

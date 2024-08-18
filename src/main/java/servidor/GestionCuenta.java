@@ -37,7 +37,7 @@ public class GestionCuenta {
         }
 
     }
-    public  boolean iniciarSesion(String email, String password)
+    public boolean iniciarSesion(String email, String password)
     {
         try
         {

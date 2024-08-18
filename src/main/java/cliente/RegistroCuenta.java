@@ -1,6 +1,7 @@
 package cliente;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import pojos.Cuenta;
 
 import javax.swing.*;
@@ -34,7 +35,7 @@ public class RegistroCuenta extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nombreUsuarioNuevo = nombre.getText();
-                String apellidoUsuarioNuevo = apellido.getText();
+
                 String ciudadUsuarioNuevo = ciudad.getText();
                 String emailUsuarioNuevo = email.getText();
                 String contraUsuarioNuevo = password.getText();
@@ -59,7 +60,9 @@ public class RegistroCuenta extends JFrame {
                     dos.writeUTF(mensaje);
 
                     JOptionPane.showMessageDialog(null,in.readUTF());
-
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("RequestType","close");
+                    dos.writeUTF(jsonObject.toString());
 
                     in.close();
                     dos.close();
