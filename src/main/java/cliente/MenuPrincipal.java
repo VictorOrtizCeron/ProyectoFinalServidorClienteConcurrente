@@ -15,16 +15,48 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import static java.lang.Thread.sleep;
+
 public class MenuPrincipal extends JFrame {
     private JPanel menuPrincipal;
     private JButton carritoButton;
-    private JButton agregarItemsSeleccionadosAlButton;
+    private JButton realizarCompraButton;
     private JButton perfilButton;
     private JScrollPane ScrollRestaurantes;
     private JList list1;
     private JPanel menu;
+    private JProgressBar statusEnvio;
+    private ProductoUI[] productosUIS;
+    private String email;
+    private boolean isPedido;
+    private ConfirmacionVenta confirmacionVenta;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public ProductoUI[] getProductosUIS() {
+        return productosUIS;
+    }
+
+    public void setProductosUIS(ProductoUI[] productosUIS) {
+        this.productosUIS = productosUIS;
+    }
+
+    public ConfirmacionVenta getConfirmacionVenta() {
+        return confirmacionVenta;
+    }
+
+    public void setConfirmacionVenta(ConfirmacionVenta confirmacionVenta) {
+        this.confirmacionVenta = confirmacionVenta;
+    }
 
     public MenuPrincipal() {
+
         setContentPane(menuPrincipal);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("October Eats - Menu Principal");
@@ -35,11 +67,7 @@ public class MenuPrincipal extends JFrame {
         DefaultListModel listModel = new DefaultListModel();
 
 
-
-
-
-
-        new Thread(()-> {
+        new Thread(() -> {
             try {
                 Socket socket = new Socket("localhost", 8080);
                 DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
@@ -58,23 +86,23 @@ public class MenuPrincipal extends JFrame {
                 String restInput = in.readUTF();
 
 
-
-                Restaurante[] restaurantes  = gson.fromJson(restInput,Restaurante[].class);
-
+                Restaurante[] restaurantes = gson.fromJson(restInput, Restaurante[].class);
 
 
-                for(int i = 0 ; i<restaurantes.length; i++){
+                for (int i = 0; i < restaurantes.length; i++) {
                     listModel.addElement(restaurantes[i].getNombre());
                     System.out.println(restaurantes[i].getNombre());
                 }
 
+                SwingUtilities.invokeLater(() -> {
+                    list1.setModel(listModel);
+                    list1.repaint();
 
-                list1.setModel(listModel);
-                list1.setSelectedIndex(0);
-                list1.setVisibleRowCount(restaurantes.length);
+                });
+
+
                 ScrollRestaurantes.add(list1);
-
-
+                ScrollRestaurantes.repaint();
 
 
                 JsonObject close = new JsonObject();
@@ -89,12 +117,11 @@ public class MenuPrincipal extends JFrame {
         }).start();
 
 
-
         list1.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
 
-                new Thread(()-> {
+                new Thread(() -> {
 
                     Socket socket = null;
                     try {
@@ -115,26 +142,30 @@ public class MenuPrincipal extends JFrame {
                         dos.writeUTF(mensaje);
 
 
-
                         String response = in.readUTF();
 
-                        Producto[] productos  = gson.fromJson(response,Producto[].class);
+                        Producto[] productos = gson.fromJson(response, Producto[].class);
 
-                        menu.setLayout(new BoxLayout(menu,BoxLayout.Y_AXIS));
+                        menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
                         menu.removeAll();
                         menu.repaint();
-                        for (Producto producto:productos){
+
+
+                        ProductoUI[] productosUIS = new ProductoUI[productos.length];
+
+                        int i = 0;
+                        for (Producto producto : productos) {
                             //extraer y formatear
-                            for(int i = 0 ; i<5 ; i++){
-                                String desc = producto.getDescripcion().substring(0,50);
-                                menu.add(new component(producto.getNombre(),
-                                        producto.getDescripcion(),
-                                        Float.toString(producto.getPrecio())));
-                            }
 
 
+                            ProductoUI temp = new ProductoUI(producto.getNombre(),
+                                    producto.getDescripcion(),
+                                    Float.toString(producto.getPrecio()));
+                            productosUIS[i] = temp;
+                            menu.add(temp);
+                            i++;
                         }
-
+                        setProductosUIS(productosUIS);
                         setVisible(true);
                         JsonObject close = new JsonObject();
                         close.addProperty("RequestType", "close");
@@ -145,9 +176,6 @@ public class MenuPrincipal extends JFrame {
                     }
 
                 }).start();
-
-
-
 
 
             }
@@ -166,6 +194,120 @@ public class MenuPrincipal extends JFrame {
                 }
             }
         });
+
+        realizarCompraButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Float total = 0.0F;
+                for (ProductoUI productoUI : getProductosUIS()) {
+                    total += productoUI.getCosto();
+
+                }
+
+                if (total == 0.0) {
+                    JOptionPane.showMessageDialog(null, "La selección de productos está vacía");
+                } else {
+                    ConfirmacionVenta confirmacion = new ConfirmacionVenta(getProductosUIS());
+                    confirmacion.setEmail(getEmail());
+                    confirmacion.setRestaurante(list1.getSelectedValue().toString());
+                    setConfirmacionVenta(confirmacion);
+
+                }
+
+
+            }
+        });
+
+        new Thread(()->{
+
+
+            while(true){
+
+                try{
+                    isPedido = getConfirmacionVenta().isCrearPedido();
+
+                    if(isPedido){
+
+                        repaint();
+
+                        Socket socket = null;
+                        try {
+
+                            socket = new Socket("localhost", 8080);
+                            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+
+                            DataInputStream in = new DataInputStream(socket.getInputStream());
+                            Gson gson = new Gson();
+
+
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("RequestType", "crearPedido");
+                            jsonObject.addProperty("emailCliente", email);
+                            jsonObject.addProperty("restaurante", list1.getSelectedValue().toString());
+                            jsonObject.addProperty("factura", getConfirmacionVenta().getFactura());
+                            jsonObject.addProperty("precio", getConfirmacionVenta().getTotalCosto());
+
+                            dos.writeUTF(jsonObject.toString());
+                            String respuesta = in.readUTF();
+                            //System.out.println(respuesta);
+                            if(respuesta.equals("true")){
+                                new Thread(()->{
+                                    int i =0;
+                                    while( i <100){
+                                        statusEnvio.setValue(i);
+                                        statusEnvio.setString(String.valueOf(i)+"%");
+
+                                        i++;
+                                        if(i ==50){
+                                            JOptionPane.showMessageDialog(null,"Su pedido fue recogido para ser entregado!");
+                                        }
+                                        try {
+
+                                            sleep(1000);
+                                        } catch (InterruptedException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                    }
+                                    statusEnvio.setValue(0);
+                                    statusEnvio.setString(String.valueOf(0)+"%");
+                                    JOptionPane.showMessageDialog(null,"Su pedido ha sido entregado!");
+
+
+
+
+                                }).start();
+
+
+                            }
+
+                            JsonObject close = new JsonObject();
+                            close.addProperty("RequestType", "close");
+                            dos.writeUTF(close.toString());
+
+
+
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+
+
+
+                        getConfirmacionVenta().setCrearPedido(false);
+
+                    }
+                }catch (NullPointerException e){
+                   //
+                }
+
+                try {
+                    sleep(10);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+
+
 
     }
 

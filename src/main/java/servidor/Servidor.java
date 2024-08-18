@@ -4,11 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
+import pojos.Cuenta;
 import pojos.Producto;
 import pojos.Restaurante;
 
 import java.io.*;
 import java.net.*;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class Servidor extends Thread {
@@ -69,14 +71,14 @@ public class Servidor extends Thread {
 
                     String contra = ctx.read("contra");
                     String email = ctx.read("email");
-                    System.out.println(email);
-                    System.out.println(contra);
+                    //System.out.println(email);
+                    //System.out.println(contra);
                     GestionCuenta gestion = new GestionCuenta();
 
-                    boolean respuesta = gestion.iniciarSesion(email, contra);
+                    boolean cuentaIniciada = gestion.iniciarSesion(email, contra);
 
 
-                    if (respuesta) {
+                    if (cuentaIniciada) {
                         dos.writeUTF("true");
                     } else {
                         dos.writeUTF("false");
@@ -105,6 +107,18 @@ public class Servidor extends Thread {
 
                     dos.writeUTF(gson.toJson(productos));
 
+
+                } else if (tipoRequest.equals("crearPedido")) {
+                    GestionPedidos gestionPedidos = new GestionPedidos();
+
+                    String emailCliente = ctx.read("emailCliente");
+                    String nombreRestaurante = ctx.read("restaurante");
+                    double precioD = ctx.read("precio");
+                    Float precio = Float.valueOf(Double.toString(precioD));
+                    String factura = ctx.read("factura");
+                    boolean resultado = gestionPedidos.crearPedido(emailCliente,nombreRestaurante,factura, precio);
+
+                    dos.writeUTF(String.valueOf(resultado));
 
                 } else if (tipoRequest.equals("close")) {
                     clientSocket = null;
