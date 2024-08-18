@@ -71,8 +71,7 @@ public class Servidor extends Thread {
 
                     String contra = ctx.read("contra");
                     String email = ctx.read("email");
-                    //System.out.println(email);
-                    //System.out.println(contra);
+
                     GestionCuenta gestion = new GestionCuenta();
 
                     boolean cuentaIniciada = gestion.iniciarSesion(email, contra);

@@ -63,7 +63,7 @@ public class GestionPedidos {
     }
     public boolean actualizarPedido (String emailCliente, String restaurante,String factura,Float precio)
     {
-        //System.out.println("si entra");
+
         String id_cliente ="";
         String id_restaurante = "";
         try

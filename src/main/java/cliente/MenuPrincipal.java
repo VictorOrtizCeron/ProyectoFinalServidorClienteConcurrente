@@ -19,7 +19,7 @@ import static java.lang.Thread.sleep;
 
 public class MenuPrincipal extends JFrame {
     private JPanel menuPrincipal;
-    private JButton carritoButton;
+    private JButton salirButton;
     private JButton realizarCompraButton;
     private JButton perfilButton;
     private JScrollPane ScrollRestaurantes;
@@ -91,7 +91,7 @@ public class MenuPrincipal extends JFrame {
 
                 for (int i = 0; i < restaurantes.length; i++) {
                     listModel.addElement(restaurantes[i].getNombre());
-                    System.out.println(restaurantes[i].getNombre());
+
                 }
 
                 SwingUtilities.invokeLater(() -> {
@@ -217,6 +217,12 @@ public class MenuPrincipal extends JFrame {
 
             }
         });
+        salirButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
 
         new Thread(()->{
 
@@ -249,7 +255,7 @@ public class MenuPrincipal extends JFrame {
 
                             dos.writeUTF(jsonObject.toString());
                             String respuesta = in.readUTF();
-                            //System.out.println(respuesta);
+
                             if(respuesta.equals("true")){
                                 new Thread(()->{
                                     int i =0;
