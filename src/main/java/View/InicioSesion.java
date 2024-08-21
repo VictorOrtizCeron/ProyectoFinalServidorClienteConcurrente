@@ -1,8 +1,8 @@
-package cliente;
+package View;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import pojos.Cuenta;
+import Model.Cuenta;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -73,7 +73,7 @@ public class InicioSesion extends JFrame {
                         MenuPrincipal mp = new MenuPrincipal();
                         mp.setEmail(email);
                         mp.setVisible(true);
-                        setVisible(false);
+                        dispose();
 
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.addProperty("RequestType","close");

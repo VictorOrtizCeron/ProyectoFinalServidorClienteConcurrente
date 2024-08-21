@@ -1,9 +1,9 @@
-package cliente;
+package View;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import pojos.Producto;
-import pojos.Restaurante;
+import Model.Producto;
+import Model.Restaurante;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -23,13 +23,21 @@ public class MenuPrincipal extends JFrame {
     private JButton realizarCompraButton;
     private JButton perfilButton;
     private JScrollPane ScrollRestaurantes;
-    private JList list1;
+    private JList listaRestaurantes;
     private JPanel menu;
     private JProgressBar statusEnvio;
     private ProductoUI[] productosUIS;
     private String email;
     private boolean isPedido;
     private ConfirmacionVenta confirmacionVenta;
+
+    public boolean isPedido() {
+        return isPedido;
+    }
+
+    public void setPedido(boolean pedido) {
+        isPedido = pedido;
+    }
 
     public String getEmail() {
         return email;
@@ -77,9 +85,7 @@ public class MenuPrincipal extends JFrame {
 
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("RequestType", "getRestaurantes");
-
                 String mensaje = gson.toJson(jsonObject);
-
                 dos.writeUTF(mensaje);
 
 
@@ -95,19 +101,19 @@ public class MenuPrincipal extends JFrame {
                 }
 
                 SwingUtilities.invokeLater(() -> {
-                    list1.setModel(listModel);
-                    list1.repaint();
+                    listaRestaurantes.setModel(listModel);
+                    listaRestaurantes.repaint();
 
                 });
 
 
-                ScrollRestaurantes.add(list1);
-                ScrollRestaurantes.repaint();
+                ScrollRestaurantes.setViewportView(listaRestaurantes);
 
 
                 JsonObject close = new JsonObject();
                 close.addProperty("RequestType", "close");
                 dos.writeUTF(close.toString());
+
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -117,7 +123,7 @@ public class MenuPrincipal extends JFrame {
         }).start();
 
 
-        list1.addListSelectionListener(new ListSelectionListener() {
+        listaRestaurantes.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
 
@@ -131,8 +137,11 @@ public class MenuPrincipal extends JFrame {
 
                         DataInputStream in = new DataInputStream(socket.getInputStream());
                         Gson gson = new Gson();
+
+                        //obtiene nombre del restaurante que está clickeado
                         JList source = (JList) e.getSource();
                         String restaurante = (String) source.getSelectedValue();
+
 
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.addProperty("RequestType", "getProductos");
@@ -155,8 +164,6 @@ public class MenuPrincipal extends JFrame {
 
                         int i = 0;
                         for (Producto producto : productos) {
-                            //extraer y formatear
-
 
                             ProductoUI temp = new ProductoUI(producto.getNombre(),
                                     producto.getDescripcion(),
@@ -185,9 +192,9 @@ public class MenuPrincipal extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Perfil perfil = new Perfil();
+                    Perfil perfil = new Perfil(getEmail());
                     perfil.setVisible(true);
-                    setVisible(false);
+                    dispose();
 
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
@@ -209,7 +216,7 @@ public class MenuPrincipal extends JFrame {
                 } else {
                     ConfirmacionVenta confirmacion = new ConfirmacionVenta(getProductosUIS());
                     confirmacion.setEmail(getEmail());
-                    confirmacion.setRestaurante(list1.getSelectedValue().toString());
+                    confirmacion.setRestaurante(listaRestaurantes.getSelectedValue().toString());
                     setConfirmacionVenta(confirmacion);
 
                 }
@@ -224,15 +231,15 @@ public class MenuPrincipal extends JFrame {
             }
         });
 
-        new Thread(()->{
+        new Thread(() -> {
 
 
-            while(true){
+            while (true) {
 
-                try{
+                try {
                     isPedido = getConfirmacionVenta().isCrearPedido();
 
-                    if(isPedido){
+                    if (isPedido) {
 
                         repaint();
 
@@ -249,23 +256,23 @@ public class MenuPrincipal extends JFrame {
                             JsonObject jsonObject = new JsonObject();
                             jsonObject.addProperty("RequestType", "crearPedido");
                             jsonObject.addProperty("emailCliente", email);
-                            jsonObject.addProperty("restaurante", list1.getSelectedValue().toString());
+                            jsonObject.addProperty("restaurante", listaRestaurantes.getSelectedValue().toString());
                             jsonObject.addProperty("factura", getConfirmacionVenta().getFactura());
                             jsonObject.addProperty("precio", getConfirmacionVenta().getTotalCosto());
 
                             dos.writeUTF(jsonObject.toString());
                             String respuesta = in.readUTF();
 
-                            if(respuesta.equals("true")){
-                                new Thread(()->{
-                                    int i =0;
-                                    while( i <100){
+                            if (respuesta.equals("true")) {
+                                new Thread(() -> {
+                                    int i = 0;
+                                    while (i < 100) {
                                         statusEnvio.setValue(i);
-                                        statusEnvio.setString(String.valueOf(i)+"%");
+                                        statusEnvio.setString(String.valueOf(i) + "%");
 
-                                        i +=1;
-                                        if(i ==50){
-                                            JOptionPane.showMessageDialog(null,"Su pedido fue recogido para ser entregado!");
+                                        i += 5;
+                                        if (i == 50) {
+                                            JOptionPane.showMessageDialog(null, "Su pedido fue recogido para ser entregado!");
                                         }
                                         try {
 
@@ -275,8 +282,8 @@ public class MenuPrincipal extends JFrame {
                                         }
                                     }
                                     statusEnvio.setValue(0);
-                                    statusEnvio.setString(String.valueOf(0)+"%");
-                                    JOptionPane.showMessageDialog(null,"Su pedido ha sido entregado!");
+                                    statusEnvio.setString(String.valueOf(0) + "%");
+
 
                                     try {
                                         Socket socketPedido = new Socket("localhost", 8080);
@@ -289,16 +296,15 @@ public class MenuPrincipal extends JFrame {
                                         JsonObject jsonObjectPedido = new JsonObject();
                                         jsonObjectPedido.addProperty("RequestType", "actualizarPedido");
                                         jsonObjectPedido.addProperty("emailCliente", email);
-                                        jsonObjectPedido.addProperty("restaurante", list1.getSelectedValue().toString());
+                                        jsonObjectPedido.addProperty("restaurante", listaRestaurantes.getSelectedValue().toString());
                                         jsonObjectPedido.addProperty("factura", getConfirmacionVenta().getFactura());
                                         jsonObjectPedido.addProperty("precio", getConfirmacionVenta().getTotalCosto());
                                         dosPedido.writeUTF(jsonObjectPedido.toString());
-
+                                        JOptionPane.showMessageDialog(null, "Su pedido ha sido entregado!");
 
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
                                     }
-
 
 
                                 }).start();
@@ -309,20 +315,19 @@ public class MenuPrincipal extends JFrame {
                             JsonObject close = new JsonObject();
                             close.addProperty("RequestType", "close");
                             dos.writeUTF(close.toString());
-
-
+                            dos.close();
+                            in.close();
+                            socket.close();
 
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }
 
-
-
                         getConfirmacionVenta().setCrearPedido(false);
-
+                        setPedido(false);
                     }
-                }catch (NullPointerException e){
-                   //
+                } catch (NullPointerException e) {
+                    //
                 }
 
                 try {
@@ -330,9 +335,9 @@ public class MenuPrincipal extends JFrame {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+
             }
         }).start();
-
 
 
     }

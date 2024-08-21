@@ -1,4 +1,4 @@
-package cliente;
+package View;
 
 import java.io.IOException;
 
@@ -7,7 +7,6 @@ public class MainCliente {
 
         InicioSesion login = new InicioSesion();
 
-        //testeo del commit del branchpao2
 
     }
 
