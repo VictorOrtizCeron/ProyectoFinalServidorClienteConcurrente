@@ -1,19 +1,8 @@
-package cliente;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import pojos.Pedido;
+package View;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
 
 public class ConfirmacionVenta extends JFrame{
     private JButton cancelarButton;
@@ -24,6 +13,7 @@ public class ConfirmacionVenta extends JFrame{
     private String restaurante;
     private String factura;
     private Float totalCosto;
+    private boolean crearPedido;
 
     public Float getTotalCosto() {
         return totalCosto;
@@ -41,7 +31,7 @@ public class ConfirmacionVenta extends JFrame{
         this.factura = factura;
     }
 
-    private boolean crearPedido;
+
 
     public boolean isCrearPedido() {
         return crearPedido;

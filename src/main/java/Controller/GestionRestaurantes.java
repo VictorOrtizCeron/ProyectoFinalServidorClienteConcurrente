@@ -1,7 +1,7 @@
-package servidor;
+package Controller;
 
-import pojos.Producto;
-import pojos.Restaurante;
+import Model.Producto;
+import Model.Restaurante;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

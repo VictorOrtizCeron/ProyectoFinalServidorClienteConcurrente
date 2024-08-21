@@ -1,8 +1,7 @@
-package servidor;
+package Controller;
 
-import pojos.Cuenta;
+import Model.Cuenta;
 
-import javax.swing.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -37,20 +36,47 @@ public class GestionCuenta {
         }
 
     }
+    public Cuenta getInfoCuenta (String email)
+    {
+        try
+        {
+            conexion.setConexion();
+            conexion.setConsulta("SELECT * FROM octobereats.cuentas WHERE email =?;");
+            conexion.getConsulta().setString(1, email);
+
+            resultado = conexion.getResultado();
+
+            while (resultado.next()) {
+
+                String nombre = resultado.getString("nombre");
+
+                String ciudad = resultado.getString("ciudad");
+
+
+                Cuenta temp = new Cuenta(nombre, email,ciudad,"");
+                return temp;
+            }
+        }
+        catch(SQLException error)
+        {
+            error.printStackTrace();
+            return null;
+        }
+
+        return null;
+    }
     public boolean iniciarSesion(String email, String password)
     {
         try
         {
             conexion.setConexion();
-            conexion.setConsulta("SELECT * FROM octobereats.cuentas WHERE email = ?" + "AND contra = ?");
+            conexion.setConsulta("SELECT * FROM octobereats.cuentas WHERE email = ?" + "AND contra = ?;");
             conexion.getConsulta().setString(1, email);
             conexion.getConsulta().setString(2, password);
             resultado = conexion.getResultado();
 
 
             if(resultado.next()){
-
-
 
                 conexion.cerrar();
                 return true;

@@ -1,8 +1,8 @@
-package cliente;
+package View;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import pojos.Cuenta;
+import Model.Cuenta;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -41,9 +41,7 @@ public class RegistroCuenta extends JFrame {
                 String contraUsuarioNuevo = password.getText();
 
 
-                //validar que no sean nulos o vacios
-                //enviar al backend con sockets
-                //escribir el gson
+
 
                 try {
                     Socket socket = new Socket("localhost", 8080);

@@ -1,4 +1,4 @@
-package pojos;
+package Model;
 
 public class Cuenta {
 

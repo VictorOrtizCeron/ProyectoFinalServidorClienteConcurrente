@@ -1,17 +1,16 @@
-package servidor;
+package Controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
-import pojos.Cuenta;
-import pojos.Producto;
-import pojos.Restaurante;
+import Model.Cuenta;
+import Model.Pedido;
+import Model.Producto;
+import Model.Restaurante;
 
 import java.io.*;
 import java.net.*;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 
 public class Servidor extends Thread {
 
@@ -85,12 +84,6 @@ public class Servidor extends Thread {
                 } else if (tipoRequest.equals("getRestaurantes")) {
                     GestionRestaurantes gestionRestaurantes = new GestionRestaurantes();
                     Restaurante[] restaurantes = gestionRestaurantes.getRestaurantes();
-
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("Restaurantes", gson.toJson(restaurantes));
-
-                    String mensaje = jsonObject.toString();
-
                     dos.writeUTF(gson.toJson(restaurantes));
 
                 } else if (tipoRequest.equals("getProductos")) {
@@ -132,7 +125,25 @@ public class Servidor extends Thread {
 
                     dos.writeUTF(String.valueOf(resultado));
 
-                } else if (tipoRequest.equals("close")) {
+
+                }else if (tipoRequest.equals("getHistorial")) {
+                    GestionPedidos gestionPedidos = new GestionPedidos();
+
+                    String emailCliente = ctx.read("emailCliente");
+
+                    Pedido[] historial = gestionPedidos.getHistorial(emailCliente);
+
+                    dos.writeUTF(gson.toJson(historial));
+
+
+                } else if(tipoRequest.equals("getDatos")){
+                    GestionCuenta gestionCuenta = new GestionCuenta();
+                    String emailCliente = ctx.read("emailCliente");
+                    Cuenta cuenta = gestionCuenta.getInfoCuenta(emailCliente);
+                    String mensaje = gson.toJson(cuenta , Cuenta.class);
+                    dos.writeUTF(mensaje);
+
+                }else if (tipoRequest.equals("close")) {
                     clientSocket = null;
                     isCorriendo = false;
                     dos.close();
