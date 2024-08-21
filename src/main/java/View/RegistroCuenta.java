@@ -73,6 +73,7 @@ public class RegistroCuenta extends JFrame {
                 try {
                     // Aquí va el código para manejar la conexión o enviar datos
                     MenuPrincipal mp = new MenuPrincipal();
+                    mp.setEmail(emailUsuarioNuevo);
                     mp.setVisible(true);
                     setVisible(false);
 
