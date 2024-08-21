@@ -193,6 +193,7 @@ public class MenuPrincipal extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     Perfil perfil = new Perfil(getEmail());
+                    System.out.println(getEmail());
                     perfil.setVisible(true);
                     dispose();
 
@@ -238,10 +239,10 @@ public class MenuPrincipal extends JFrame {
 
                 try {
                     isPedido = getConfirmacionVenta().isCrearPedido();
-
+                    System.out.println(isPedido);
                     if (isPedido) {
 
-                        repaint();
+
 
                         Socket socket = null;
                         try {
@@ -262,15 +263,22 @@ public class MenuPrincipal extends JFrame {
 
                             dos.writeUTF(jsonObject.toString());
                             String respuesta = in.readUTF();
-
+                            Float costo = getConfirmacionVenta().getTotalCosto();
                             if (respuesta.equals("true")) {
+                                String factura = getConfirmacionVenta().getFactura();
+
                                 new Thread(() -> {
+
                                     int i = 0;
                                     while (i < 100) {
-                                        statusEnvio.setValue(i);
-                                        statusEnvio.setString(String.valueOf(i) + "%");
+                                        int s = i;
+                                        SwingUtilities.invokeLater(() -> {
+                                            statusEnvio.setValue(s);
+                                            statusEnvio.setString(s + "%");
+                                        });
 
-                                        i += 5;
+
+                                        i += 10;
                                         if (i == 50) {
                                             JOptionPane.showMessageDialog(null, "Su pedido fue recogido para ser entregado!");
                                         }
@@ -281,8 +289,10 @@ public class MenuPrincipal extends JFrame {
                                             throw new RuntimeException(e);
                                         }
                                     }
-                                    statusEnvio.setValue(0);
-                                    statusEnvio.setString(String.valueOf(0) + "%");
+                                    SwingUtilities.invokeLater(() -> {
+                                        statusEnvio.setValue(0);
+                                        statusEnvio.setString(String.valueOf(0) + "%");
+                                    });
 
 
                                     try {
@@ -297,10 +307,18 @@ public class MenuPrincipal extends JFrame {
                                         jsonObjectPedido.addProperty("RequestType", "actualizarPedido");
                                         jsonObjectPedido.addProperty("emailCliente", email);
                                         jsonObjectPedido.addProperty("restaurante", listaRestaurantes.getSelectedValue().toString());
-                                        jsonObjectPedido.addProperty("factura", getConfirmacionVenta().getFactura());
-                                        jsonObjectPedido.addProperty("precio", getConfirmacionVenta().getTotalCosto());
+                                        jsonObjectPedido.addProperty("factura", factura);
+                                        jsonObjectPedido.addProperty("precio", costo);
                                         dosPedido.writeUTF(jsonObjectPedido.toString());
                                         JOptionPane.showMessageDialog(null, "Su pedido ha sido entregado!");
+
+
+                                        JsonObject close = new JsonObject();
+                                        close.addProperty("RequestType", "close");
+                                        dosPedido.writeUTF(close.toString());
+                                        dosPedido.close();
+                                        inPedido.close();
+                                        socketPedido.close();
 
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
@@ -318,20 +336,24 @@ public class MenuPrincipal extends JFrame {
                             dos.close();
                             in.close();
                             socket.close();
+                            setPedido(false);
+                            setConfirmacionVenta(null);
 
                         } catch (IOException ex) {
-                            throw new RuntimeException(ex);
+                            //throw new RuntimeException(ex);
                         }
 
-                        getConfirmacionVenta().setCrearPedido(false);
-                        setPedido(false);
+
                     }
+
                 } catch (NullPointerException e) {
                     //
                 }
 
+
+
                 try {
-                    sleep(10);
+                    sleep(30);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
